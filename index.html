@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regex Tester</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0b1120;color:white;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:#1e293b;padding:20px;border-radius:12px;width:100%;max-width:500px}
+h2{text-align:center;color:#ec4899;margin-bottom:15px}
+input,textarea{width:100%;padding:10px;background:#0f172a;border:1px solid #334155;color:white;border-radius:6px;margin-bottom:10px;font-family:monospace}
+.output{background:#0b1120;padding:12px;border-radius:8px;min-height:80px;font-family:monospace;line-height:1.6;white-space:pre-wrap}
+mark{background:#3b82f6;color:white;padding:1px 3px;border-radius:3px}
+.info{font-size:13px;color:#94a3b8;margin-top:8px}
+.err{color:#ef4444}
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>🔍 Regex Tester</h2>
+  <input id="pattern" placeholder="/pattern/g" value="/\b\w+@\w+\.\w+\b/g">
+  <textarea id="text" rows="3" placeholder="Sinov matni...">Salom, emailim user@example.com yoki admin@site.org ga yozing.</textarea>
+  <div class="output" id="out"></div>
+  <div class="info" id="info">Mosliklar: 0</div>
+</div>
+<script>
+const p=document.getElementById('pattern'),t=document.getElementById('text'),o=document.getElementById('out'),i=document.getElementById('info');
+function run(){
+  try{
+    const reg=new RegExp(p.value,'g');
+    const matches=[...t.value.matchAll(reg)];
+    i.textContent=`Mosliklar: ${matches.length}`;i.className='info';
+    let html=t.value;
+    matches.reverse().forEach(m=>{
+      html=html.slice(0,m.index)+`<mark>${m[0]}</mark>`+html.slice(m.index+m[0].length);
+    });
+    o.innerHTML=html;
+  }catch(e){i.textContent='❌ '+e.message;i.className='info err';o.textContent=t.value}
+}
+p.addEventListener('input',run);t.addEventListener('input',run);run();
+</script>
+</body>
+</html>
